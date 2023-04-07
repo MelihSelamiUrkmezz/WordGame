@@ -21,7 +21,9 @@ local.properties
 PythonBackend/pycache/
 PythonBackend/*.py[cod]
 PythonBackend/*$py.class
-
+PythonBackend/env/*
+PythonBackend/env
+PythonBackend/env/
 # C extensions
 PythonBackend/*.so
 
