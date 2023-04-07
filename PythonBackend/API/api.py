@@ -20,7 +20,6 @@ class wordinfo(BaseModel):
 
 @app.post("/word_check/")
 async def word_check(request: Request):
-    
     req_json= await request.json()
     word=req_json['word']
     print(word)
@@ -48,7 +47,7 @@ async def word_check(request: Request):
 @app.get("/healthcheck")
 async def connection_checkpoint():
     try:
-        client.ping()
+        client.admin.command('ping')
         result = {            
             "message":"MongoDB connection is a successfuly!",
             "success": True
