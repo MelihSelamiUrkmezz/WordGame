@@ -20,6 +20,8 @@ class MainActivity : AppCompatActivity() {
     var characters = ArrayList<Character>();
     //selectedCharacters
     var selectedCharacterIntex: Int?=null;
+    //falling Time
+    var fallingTime:Long = 5000;
 
 
 
@@ -52,43 +54,34 @@ class MainActivity : AppCompatActivity() {
 
         //start begin chaacter initilazed
         var starterCounter: Int = 0;
-        while (starterCounter < 16){
-            var value: String = createRandomCharacter();
-            //we dont use freezing for now
-            characters.add(Character(value));
+        while (starterCounter < 80){
+            if(starterCounter < 24){
+                var value: String = createRandomCharacter();
+                //we dont use freezing and score for now
+                characters.add(Character(value));
+            }else{
+                characters.add(Character());
+            }
             starterCounter = starterCounter + 1;
         }
         //end
 
         //start set begin value to buttons
         starterCounter = 0;
-        while (starterCounter < 16){
+        while (starterCounter < 80){
             buttons[starterCounter].text = characters[starterCounter].value;
             starterCounter = starterCounter +1;
         }
         //end
 
         //start begin animation for 16 values
-        var rowCounter:Int = 8;
-        var starterAnimation  = object :CountDownTimer(10000,200){
-            override fun onTick(p0: Long) {
-                if(rowCounter >= 64){
-                    // 64 is starter index of ninth row
-                    cancel()
-                }
-                setViewsStarterAnimation(rowCounter);
-                rowCounter = rowCounter +8;
-            }
-            override fun onFinish() {}
-        }
-        starterAnimation.start()
+        startStarterAnimation();
         //end
 
         //start fallAnimation by timer
         var isFirstFallAnimation = true;
-        object :CountDownTimer(50000000, 6000){
+        object :CountDownTimer(500000000, fallingTime){
             override fun onTick(p0: Long) {
-
                 if(isFirstFallAnimation){
                     // we have just wasted first 4 second time here
                     isFirstFallAnimation = false;
@@ -123,6 +116,23 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    //start begin startAnimation time
+    fun startStarterAnimation(){
+        var rowCounter:Int = 16;
+        object :CountDownTimer(10000,200){
+            override fun onTick(p0: Long) {
+                if(rowCounter > 56){
+                    // 56 is starter index of eighth row
+                    cancel()
+                }
+                setViewsStarterAnimation(rowCounter);
+                rowCounter = rowCounter +8;
+            }
+            override fun onFinish() {}
+        }.start()
+    }
+    //end
+
     //start begin animationViews
     fun setViewsStarterAnimation(rowCounter: Int){
 
@@ -132,30 +142,66 @@ class MainActivity : AppCompatActivity() {
             // get button and set text empty
             var button: Button = buttons[i]
             var buttonText = button.text.toString()
+            // change old button and character
+            button.text="";
+            characters[i].value="";
 
             // set text new location
             var targetButon: Button = buttons[i+8];
+            // chage button text and characte text
             targetButon.text = buttonText;
+            characters[i+8].value = buttonText;
+
+            targetButon.setBackgroundColor(Color.parseColor("#E8A0BF"))
         }
 
         for(i in temp-8.. temp-1) {
             // get button and set text empty
             var button: Button = buttons[i]
             var buttonText = button.text.toString()
+            // change old button and character
             button.text="";
+            characters[i].value="";
+
+
+            // set text new location
+            var targetButon: Button = buttons[i+8];
+            // chage button text and characte text
+            targetButon.text = buttonText;
+            characters[i+8].value = buttonText;
+            targetButon.setBackgroundColor(Color.parseColor("#E8A0BF"))
+        }
+
+        for(i in temp-16.. temp-9) {
+            // get button and set text empty
+            var button: Button = buttons[i]
+            var buttonText = button.text.toString()
+            // change old button and character
+            button.text="";
+            characters[i].value="";
             button.setBackgroundColor(Color.parseColor("#ffffff"))
 
             // set text new location
             var targetButon: Button = buttons[i+8];
+            // chage button text and characte text
             targetButon.text = buttonText;
+            characters[i+8].value = buttonText;
+            targetButon.setBackgroundColor(Color.parseColor("#E8A0BF"))
         }
 
     }
     //end
 
     //start begin random FallAnimation timer
-    fun startRandomFallAnimation(){
-        var fallingColumn = createRandomColumn();
+    fun startRandomFallAnimation(specificColumn: Int = -1){
+        var fallingColumn:Int;
+        //random
+        if(specificColumn == -1)
+             fallingColumn = createRandomColumn();
+        //not random we can use for all row so...
+        else
+             fallingColumn = specificColumn;
+
         var fallIndexCounter = fallingColumn;
         var createdCharacter = createRandomCharacter();
 
@@ -190,7 +236,6 @@ class MainActivity : AppCompatActivity() {
     //start set view randomFallAnimation
     fun setViewRandomFallAnimation(fallIndex:Int, character:String): Boolean{
         var index = fallIndex;
-
         //first Row condition
         if(index <= 7){
             //first row
@@ -203,6 +248,7 @@ class MainActivity : AppCompatActivity() {
                 return true;
             }else{
                 button.text = character;
+                characters[index].value = character;
                 button.setBackgroundColor(Color.parseColor("#E8A0BF"))
                 return  false;
             }
@@ -217,9 +263,11 @@ class MainActivity : AppCompatActivity() {
                 return true;
             }else{
                 oldButton.text="";
+                characters[index-8].value="";
                 oldButton.setBackgroundColor(Color.parseColor("#ffffff"))
 
                 nextButton.text=character;
+                characters[index].value=character;
                 nextButton.setBackgroundColor(Color.parseColor("#E8A0BF"))
 
                 return false;
