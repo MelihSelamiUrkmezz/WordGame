@@ -18,10 +18,10 @@ class MainActivity : AppCompatActivity() {
     var buttons = ArrayList<Button>();
     //characters
     var characters = ArrayList<Character>();
-    //selectedCharacters
-    var selectedCharacterIntex: Int?=null;
     //falling Time
     var fallingTime:Long = 5000;
+    //selectedButtons
+    var selectedButtonsIndex = ArrayList<Int>();
 
 
 
@@ -96,13 +96,22 @@ class MainActivity : AppCompatActivity() {
         //start add clickLister to all buttons
         buttons.forEachIndexed{index: Int, button: Button ->
             button.setOnClickListener {
-                getSelectedButtonValue(index);
+                if(isClicked(index)){
+                    // if clicked and last vlue have to delete
+                    deleteIfLastClicking(index)
+                }else{
+                    //value
+                    getSelectedButtonValue(index);
+                    //disable
+                    setDisableToSelectedButton(index);
+                }
             }
         }
         //end
 
         //start delete response clicklistener
         deleteButton.setOnClickListener{
+            setEnableToSelectedAllButtons()
             wordResult.text = "";
         }
         //end
@@ -205,7 +214,7 @@ class MainActivity : AppCompatActivity() {
         var fallIndexCounter = fallingColumn;
         var createdCharacter = createRandomCharacter();
 
-        var fallingAnimation = object :CountDownTimer(100000, 500){
+        var fallingAnimation = object :CountDownTimer(100000, 300){
             override fun onTick(p0: Long) {
                 if(
                     fallIndexCounter > 72||
@@ -285,6 +294,75 @@ class MainActivity : AppCompatActivity() {
         //save wordResuly
         if(characterValue != null && characterValue.length != 0)
             wordResult.text = wordResult.text.toString() + characterValue;
+    }
+    //end
+
+    //start disable to selected Button
+    fun setDisableToSelectedButton(index: Int){
+        // add disabled array to find later
+        selectedButtonsIndex.add(index);
+        // diasbled characters
+        characters[index].isActive = false;
+        // disabled buttons
+        buttons[index].setBackgroundColor(Color.parseColor("#77037B"))
+        buttons[index].setTextColor(Color.parseColor("#FFFFFF"))
+    }
+    //end
+
+    //start enable to all selected buttons
+    fun setEnableToSelectedAllButtons(){
+        // add enabled all selected buttons
+        for(index in selectedButtonsIndex){
+
+            // enable to characters
+            characters[index].isActive = true;
+            // enable buttons
+            buttons[index].setBackgroundColor(Color.parseColor("#E8A0BF"))
+            buttons[index].setTextColor(Color.parseColor("#000000"))
+        }
+
+        // clear selected array
+        selectedButtonsIndex.clear()
+    }
+    //end
+
+    //Start enable to specific button
+    fun setEnableToSelectedButton(index: Int){
+
+        // enable to characters
+        characters[index].isActive = true;
+        // enable buttons
+        buttons[index].setBackgroundColor(Color.parseColor("#E8A0BF"))
+        buttons[index].setTextColor(Color.parseColor("#000000"))
+
+        selectedButtonsIndex.remove(index);
+
+    }
+    //end
+
+    //start if lastcliked buttons delete else do nothing
+    fun deleteIfLastClicking(index: Int){
+
+        var result:String = wordResult.text.toString();
+
+        if(result.last().toString().equals(buttons[index].text.toString())){
+
+            //clear output
+            result = result.dropLast(1);
+            wordResult.text = result;
+            //set enable To button
+            setEnableToSelectedButton(index);
+        }
+    }
+    //end
+
+    //start checkIsClick
+    fun isClicked(index: Int): Boolean{
+        if(selectedButtonsIndex.indexOf(index) != -1){
+            return true
+        }
+
+        return false
     }
     //end
 
