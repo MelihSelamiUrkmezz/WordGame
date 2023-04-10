@@ -22,6 +22,8 @@ class MainActivity : AppCompatActivity() {
     var fallingTime:Long = 5000;
     //selectedButtons
     var selectedButtonsIndex = ArrayList<Int>();
+    //emptyButtons
+    var emptyButtonsIndex = ArrayList<Int>();
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -100,9 +102,11 @@ class MainActivity : AppCompatActivity() {
                     deleteIfLastClicking(index)
                 }else{
                     //value
-                    getSelectedButtonValue(index);
+                    var isPassThisCase:Boolean = getSelectedButtonValue(index);
                     //disable
+                    if(isPassThisCase)
                     setDisableToSelectedButton(index);
+                    //orNothing
                 }
             }
         }
@@ -119,6 +123,13 @@ class MainActivity : AppCompatActivity() {
         applyButton.setOnClickListener{
             // have to add API function
 
+            // for now all click correct
+            disapperCorrectWord();
+
+            //this while for one more blank buttons
+            while (emptyButtonsIndex.size != 0){
+                setViewSlidedButtonIfCorrect(findSlidedOtherButtonsToEmptybuttons());
+            }
         }
         //end
 
@@ -285,14 +296,18 @@ class MainActivity : AppCompatActivity() {
     //end
 
     //start get stelected button and set Response text
-    fun getSelectedButtonValue(index: Int){
+    fun getSelectedButtonValue(index: Int):Boolean{
 
         var selectedButton: Button = buttons[index];
         var characterValue: String? = selectedButton.getText().toString();
 
         //save wordResuly
-        if(characterValue != null && characterValue.length != 0)
+        if(characterValue != null && characterValue.length != 0){
             wordResult.text = wordResult.text.toString() + characterValue;
+            return true;
+        }
+
+        return false
     }
     //end
 
@@ -345,7 +360,6 @@ class MainActivity : AppCompatActivity() {
         var result:String = wordResult.text.toString();
 
         if(result.last().toString().equals(buttons[index].text.toString())){
-
             //clear output
             result = result.dropLast(1);
             wordResult.text = result;
@@ -362,6 +376,121 @@ class MainActivity : AppCompatActivity() {
         }
 
         return false
+    }
+    //end
+
+    //start disapper CorrectWord
+    fun disapperCorrectWord(){
+        for(index in selectedButtonsIndex){
+            //clear character
+            characters[index].value = "";
+            characters[index].isActive = true;
+
+            buttons[index].text = "";
+            buttons[index].setBackgroundColor(Color.parseColor("#FFFFFF"))
+        }
+        //copySelected array to empty array
+        emptyButtonsIndex.addAll(selectedButtonsIndex);
+        //clear selected array
+        selectedButtonsIndex.clear();
+        //clear response
+        wordResult.text = "";
+    }
+    //end
+
+    //start check under is it empty
+    fun findSlidedOtherButtonsToEmptybuttons(): ArrayList<ArrayList<Int>>{
+        // will slide one step group
+        var slidedGroupButtons: ArrayList<ArrayList<Int>> = ArrayList<ArrayList<Int>>();
+        // will slide one step buttons index
+        var slidedButtons: ArrayList<Int> = ArrayList<Int>();
+
+        // temp for empty button I initilazed for calculating
+        var tempEmptyButtons : ArrayList<Int> = ArrayList<Int>();
+        tempEmptyButtons.addAll(emptyButtonsIndex);
+
+        // roundCounter for find multiples of 8
+        var roundCounter: Int = 1;
+
+        // this flag is finding  Are there any blank buttons more one in rows
+        var flag:Boolean = false;
+
+        for(emptyIndex in tempEmptyButtons){
+            // not first Row
+            if(emptyIndex-8>=0){
+                while(true){
+                    // find top of emptyIndex
+                    var topOfEmtyIndex = emptyIndex-(8*roundCounter);
+
+                    // get buttons
+                    var button:Button = buttons[topOfEmtyIndex];
+
+                    // check button is empty
+                    if(button != null && button.text.toString().length != 0){
+                        slidedButtons.add(topOfEmtyIndex);
+                        flag = true;
+                        roundCounter = roundCounter + 1;
+                    }else{
+                        //buttons is empty so we must stop
+                        if(flag){
+                            //buttons is empty but has buttons to under
+                            emptyButtonsIndex.remove(emptyIndex);
+                            flag = false;
+                            roundCounter = 1;
+                            break;
+                        }else{
+                            //buttons is empty and under buttons empty to
+                            //so we dont remove and go another step for this index
+                            roundCounter = 1;
+                            break;
+                        }
+                    }
+
+                }
+            }else{
+                // do nothing. becasuse cleanin operation has already done
+            }
+
+            // added to slieded group
+            slidedGroupButtons.add(slidedButtons);
+            // clear previos index
+            slidedButtons = ArrayList<Int>();
+        }
+        return slidedGroupButtons
+    }
+    //end
+
+    //start View slidedButtons if Correct
+    fun setViewSlidedButtonIfCorrect(slidedGroupButtons: ArrayList<ArrayList<Int>>){
+
+
+        for(slidedButtons in slidedGroupButtons){
+
+            for(slidedButton in slidedButtons){
+                println("-------------")
+                println(slidedButton)
+                // get Old Button
+                var oldButton:Button = buttons[slidedButton];
+                // get Old Button text
+                var oldButtonText:String = oldButton.text.toString();
+                // set empty oldButton and the character
+                oldButton.text = "";
+                characters[slidedButton].value = ""
+                // change color to white
+                oldButton.setBackgroundColor(Color.parseColor("#FFFFFF"))
+                println(oldButtonText)
+                // set new button
+                var newButton: Button = buttons[slidedButton+8];
+                // set new Buttons Text and also chahracter
+                newButton.text = oldButtonText;
+                characters[slidedButton+8].value = oldButtonText;
+                // change color to purpole
+                newButton.setBackgroundColor(Color.parseColor("#E8A0BF"))
+                newButton.setTextColor(Color.parseColor("#000000"))
+
+            }
+        }
+
     }
     //end
 
