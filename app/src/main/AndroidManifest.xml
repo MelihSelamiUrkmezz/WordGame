@@ -12,8 +12,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Wordgame"
         tools:targetApi="31">
+
         <activity
             android:name=".MainActivity"
+
+            android:exported="false">
+
+        </activity>
+        <activity
+                android:name=".Login"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
