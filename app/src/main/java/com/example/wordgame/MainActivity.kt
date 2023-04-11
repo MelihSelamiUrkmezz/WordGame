@@ -8,6 +8,7 @@ import android.os.Handler
 import android.os.Looper
 import android.widget.Button
 import com.example.wordgame.domain.entities.Character
+import com.example.wordgame.domain.enums.Points
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 import kotlin.collections.ArrayList
@@ -24,6 +25,8 @@ class MainActivity : AppCompatActivity() {
     var selectedButtonsIndex = ArrayList<Int>();
     //emptyButtons
     var emptyButtonsIndex = ArrayList<Int>();
+    //sum calculater
+    var sum :Int = 0;
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -99,13 +102,20 @@ class MainActivity : AppCompatActivity() {
             button.setOnClickListener {
                 if(isClicked(index)){
                     // if clicked and last vlue have to delete
-                    deleteIfLastClicking(index)
+                    deleteIfLastClicking(index);
+                    //also update sum
+                    calculateNegativeSum(index);
                 }else{
-                    //value
+                    //get seelcted buttons text value
                     var isPassThisCase:Boolean = getSelectedButtonValue(index);
-                    //disable
-                    if(isPassThisCase)
-                    setDisableToSelectedButton(index);
+                    //disable that buttons if is pass the case and calculate
+                    if(isPassThisCase){
+                        //disable opeartion for button
+                        setDisableToSelectedButton(index);
+                        //also update sum
+                        calculatePositiveSum(index);
+                    }
+
                     //orNothing
                 }
             }
@@ -114,8 +124,11 @@ class MainActivity : AppCompatActivity() {
 
         //start delete response clicklistener
         deleteButton.setOnClickListener{
+            //enable buttons
             setEnableToSelectedAllButtons()
+            //clear value has written
             wordResult.text = "";
+            sum = 0;
         }
         //end
 
@@ -123,13 +136,20 @@ class MainActivity : AppCompatActivity() {
         applyButton.setOnClickListener{
             // have to add API function
 
-            // for now all click correct
+            // ----for now all click correct----
+
+            //destroy buttons and characters value
             disapperCorrectWord();
 
             //this while for one more blank buttons
             while (emptyButtonsIndex.size != 0){
+                //find sliding buttons and sliding operation
                 setViewSlidedButtonIfCorrect(findSlidedOtherButtonsToEmptybuttons());
             }
+            //update totalScore
+            updateTotalScore()
+
+            // ----for now all click correct----
         }
         //end
 
@@ -269,6 +289,7 @@ class MainActivity : AppCompatActivity() {
                 button.text = character;
                 characters[index].value = character;
                 button.setBackgroundColor(Color.parseColor("#E8A0BF"))
+                button.setTextColor(Color.parseColor("#000000"))
                 return  false;
             }
         }
@@ -288,6 +309,7 @@ class MainActivity : AppCompatActivity() {
                 nextButton.text=character;
                 characters[index].value=character;
                 nextButton.setBackgroundColor(Color.parseColor("#E8A0BF"))
+                nextButton.setTextColor(Color.parseColor("#000000"))
 
                 return false;
             }
@@ -412,6 +434,9 @@ class MainActivity : AppCompatActivity() {
         // roundCounter for find multiples of 8
         var roundCounter: Int = 1;
 
+        // also we need EmptyButtons Count
+        var emptyButtonsCount:Int = emptyButtonsIndex.size;
+
         // this flag is finding  Are there any blank buttons more one in rows
         var flag:Boolean = false;
 
@@ -456,6 +481,15 @@ class MainActivity : AppCompatActivity() {
             // clear previos index
             slidedButtons = ArrayList<Int>();
         }
+
+
+        //this is special status
+        //if we use buttons one column after that
+        //this column don't need sliding
+        if(emptyButtonsCount == emptyButtonsIndex.size){
+            // we dont need sliding so just deleted
+            emptyButtonsIndex.clear();
+        }
         return slidedGroupButtons
     }
     //end
@@ -467,8 +501,7 @@ class MainActivity : AppCompatActivity() {
         for(slidedButtons in slidedGroupButtons){
 
             for(slidedButton in slidedButtons){
-                println("-------------")
-                println(slidedButton)
+
                 // get Old Button
                 var oldButton:Button = buttons[slidedButton];
                 // get Old Button text
@@ -478,7 +511,7 @@ class MainActivity : AppCompatActivity() {
                 characters[slidedButton].value = ""
                 // change color to white
                 oldButton.setBackgroundColor(Color.parseColor("#FFFFFF"))
-                println(oldButtonText)
+
                 // set new button
                 var newButton: Button = buttons[slidedButton+8];
                 // set new Buttons Text and also chahracter
@@ -493,6 +526,41 @@ class MainActivity : AppCompatActivity() {
 
     }
     //end
+
+    //start calculate sum for positive
+    fun calculatePositiveSum(index: Int){
+        // get value from buttons or characters
+        var text = characters[index].value;
+        // get enums to text
+        var point = Points.valueOf(text);
+
+        // add value
+        sum+= point.value;
+    }
+    //end
+
+    //start calculate sum for negative
+    fun calculateNegativeSum(index: Int){
+        // get value from buttons or characters
+        var text = characters[index].value;
+        // get enums to text
+        var point = Points.valueOf(text);
+
+        // remove value
+        sum-= point.value;
+    }
+    //end
+
+    //start update score
+    fun updateTotalScore(){
+        // update score
+        var oldScore:Int = score.text.toString().toInt();
+        score.text = (oldScore+sum).toString();
+
+        //clear sum
+        sum = 0;
+    }
+    //end update score
 
     //start creat random character between of A and Z
     fun createRandomCharacter(): String {
