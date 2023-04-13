@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "173281030749",
+    "project_id": "scoreboard-32d1a",
+    "storage_bucket": "scoreboard-32d1a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:173281030749:android:20f959127ad6162ffad3b4",
+        "android_client_info": {
+          "package_name": "com.example.wordgame"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "173281030749-sr6th1bdf13b636k5i63ioeufs9ngsg0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD9wKJYi8Sz85EQDRH14nPR8JDVx3r2zXE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "173281030749-sr6th1bdf13b636k5i63ioeufs9ngsg0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

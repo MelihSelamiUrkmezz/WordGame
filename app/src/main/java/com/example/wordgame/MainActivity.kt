@@ -1,17 +1,31 @@
 package com.example.wordgame
 
 import android.graphics.Color
+import android.os.*
 import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
-import android.os.CountDownTimer
-import android.os.Handler
-import android.os.Looper
 import android.widget.Button
+import androidx.annotation.RequiresApi
 import com.example.wordgame.domain.entities.Character
 import com.example.wordgame.domain.enums.Points
+import com.google.firebase.database.FirebaseDatabase
 import kotlinx.android.synthetic.main.activity_main.*
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.*
 import kotlin.collections.ArrayList
+
+// Database add data
+//var database=FirebaseDatabase.getInstance()
+//var databaseReference = database.reference.child("Scores")
+//var id= databaseReference.push()
+//id.child("id").setValue(id.key.toString())
+
+//val currentDateTime = LocalDateTime.now()
+//val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")
+//val formattedDateTime = currentDateTime.format(formatter)
+//id.child("Date").setValue(formattedDateTime)
+//id.child("Score").setValue(score.text.toString())
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -29,6 +43,10 @@ class MainActivity : AppCompatActivity() {
     var sum :Int = 0;
 
 
+
+
+
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -148,6 +166,10 @@ class MainActivity : AppCompatActivity() {
             }
             //update totalScore
             updateTotalScore()
+
+
+
+
 
             // ----for now all click correct----
         }
