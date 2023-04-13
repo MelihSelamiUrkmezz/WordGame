@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wordgameapi
+  namespace: wordgameapi
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: wordgame
+  template:
+    metadata:
+      labels:
+        app: wordgame
+    spec:
+      containers:
+      - name: wordgamecontainer
+        image: melihselamiurkmez/wordgameapi
+        ports:
+        - containerPort: 8000
+
+    
+
+    

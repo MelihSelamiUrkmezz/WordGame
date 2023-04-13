@@ -1,21 +1,27 @@
 package com.example.wordgame
-
+import kotlin.random.Random
 import android.graphics.Color
 import android.os.*
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import android.widget.Button
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import com.example.wordgame.domain.entities.Character
 import com.example.wordgame.domain.enums.Points
 import com.google.firebase.database.FirebaseDatabase
 import kotlinx.android.synthetic.main.activity_main.*
+import okhttp3.*
+import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Call
+import java.io.IOException
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
 import kotlin.collections.ArrayList
 
-// Database add data
-//var database=FirebaseDatabase.getInstance()
+// ** Oyun bitince skorun hesaplanıp firebase db'ye pushlanması gerekli. Kodlar aşağıda. sadece Score'un setvalue'sinin içi güncel score ile güncellenecek
+//var database= FirebaseDatabase.getInstance()
 //var databaseReference = database.reference.child("Scores")
 //var id= databaseReference.push()
 //id.child("id").setValue(id.key.toString())
@@ -24,7 +30,8 @@ import kotlin.collections.ArrayList
 //val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")
 //val formattedDateTime = currentDateTime.format(formatter)
 //id.child("Date").setValue(formattedDateTime)
-//id.child("Score").setValue(score.text.toString())
+//id.child("Score").setValue("12")
+
 
 
 class MainActivity : AppCompatActivity() {
@@ -41,6 +48,9 @@ class MainActivity : AppCompatActivity() {
     var emptyButtonsIndex = ArrayList<Int>();
     //sum calculater
     var sum :Int = 0;
+
+    var consonants_count: Int=0;
+    var vowels_count: Int=0;
 
 
 
@@ -73,6 +83,7 @@ class MainActivity : AppCompatActivity() {
         buttons.add(button_9_0);buttons.add(button_9_1);buttons.add(button_9_2);buttons.add(button_9_3);
         buttons.add(button_9_4);buttons.add(button_9_5);buttons.add(button_9_6);buttons.add(button_9_7);
         //end
+
 
         //start begin chaacter initilazed
         var starterCounter: Int = 0;
@@ -152,24 +163,47 @@ class MainActivity : AppCompatActivity() {
 
         //start apply response clicklistener
         applyButton.setOnClickListener{
-            // have to add API function
 
-            // ----for now all click correct----
+            val response = ServiceBuilder.buildService(APIInterface::class.java)
+            val obj=com.example.wordgame.Request(wordResult.text.toString().toLowerCase())
+            response.check_word(obj).enqueue(
+                object : retrofit2.Callback<com.example.wordgame.Response>{
+                    override fun onResponse(
+                        call: Call<Response>,
+                        response: retrofit2.Response<Response>
+                    ) {
+                        if(response.isSuccessful){
+
+                            disapperCorrectWord();
+
+                            //this while for one more blank buttons
+                            while (emptyButtonsIndex.size != 0){
+                                //find sliding buttons and sliding operation
+                                setViewSlidedButtonIfCorrect(findSlidedOtherButtonsToEmptybuttons());
+                            }
+                            //update totalScore
+                            updateTotalScore()
+
+                        }
+
+                        else{
+                            //***
+                            println("Kelime database'de bulunmuyor")
+                            //***
+
+                        }
+
+                    }
+
+                    override fun onFailure(call: Call<Response>, t: Throwable) {
+                        Log.e("API Error", t.message.toString())
+                    }
+                }
+            )
+
+
 
             //destroy buttons and characters value
-            disapperCorrectWord();
-
-            //this while for one more blank buttons
-            while (emptyButtonsIndex.size != 0){
-                //find sliding buttons and sliding operation
-                setViewSlidedButtonIfCorrect(findSlidedOtherButtonsToEmptybuttons());
-            }
-            //update totalScore
-            updateTotalScore()
-
-
-
-
 
             // ----for now all click correct----
         }
@@ -586,8 +620,45 @@ class MainActivity : AppCompatActivity() {
 
     //start creat random character between of A and Z
     fun createRandomCharacter(): String {
-        val rand = ('A'..'Z').random();
-        return rand.toString();
+        val vowels = arrayOf("a", "e", "ı", "i", "o", "ö", "u", "ü")
+        val consonants = arrayOf("b", "c", "ç", "d", "f", "g", "ğ", "h", "j", "k", "l", "m", "n", "p", "r", "s", "ş", "t", "v", "y", "z")
+
+        val ratio:Float;
+        if(vowels_count!=0 && consonants_count!=0){
+
+            ratio=vowels_count.toFloat()/consonants_count.toFloat();
+            if(ratio > 0.4){
+
+                val random_index= kotlin.random.Random.nextInt(consonants.size);
+                consonants_count++;
+                return consonants[random_index].toUpperCase();
+
+            }
+            else{
+                val random_index2= kotlin.random.Random.nextInt(vowels.size);
+                vowels_count++;
+                return vowels[random_index2].toUpperCase();
+
+            }
+        }
+        else{
+
+            if(vowels_count==0){
+                val random_index2= kotlin.random.Random.nextInt(vowels.size);
+                vowels_count++;
+                return vowels[random_index2].toUpperCase();
+
+            }
+            else if(consonants_count==0){
+                val random_index= kotlin.random.Random.nextInt(consonants.size).toInt();
+                consonants_count++;
+                return consonants[random_index].toUpperCase();
+            }
+
+
+        }
+
+        return "a";
     }
     //end
 
@@ -600,3 +671,4 @@ class MainActivity : AppCompatActivity() {
     //end
 
 }
+
