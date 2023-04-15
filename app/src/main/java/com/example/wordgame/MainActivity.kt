@@ -48,6 +48,10 @@ class MainActivity : AppCompatActivity() {
     var emptyButtonsIndex = ArrayList<Int>();
     //sum calculater
     var sum :Int = 0;
+    //life
+    var life:Int = 3;
+    //fallAnimation Flag
+    var isFirstFallAnimation = true;
 
     var consonants_count: Int=0;
     var vowels_count: Int=0;
@@ -112,7 +116,7 @@ class MainActivity : AppCompatActivity() {
         //end
 
         //start fallAnimation by timer
-        var isFirstFallAnimation = true;
+        //isFirtFalling moved to global
         object :CountDownTimer(500000000, fallingTime){
             override fun onTick(p0: Long) {
                 if(isFirstFallAnimation){
@@ -166,6 +170,8 @@ class MainActivity : AppCompatActivity() {
 
             val response = ServiceBuilder.buildService(APIInterface::class.java)
             val obj=com.example.wordgame.Request(wordResult.text.toString().toLowerCase())
+
+
             response.check_word(obj).enqueue(
                 object : retrofit2.Callback<com.example.wordgame.Response>{
                     override fun onResponse(
@@ -187,15 +193,16 @@ class MainActivity : AppCompatActivity() {
                         }
 
                         else{
-                            //***
-                            println("Kelime database'de bulunmuyor")
-                            //***
+                            //*** fail time not found
+                            createFail()
+                            //*** fail time not found
 
                         }
 
                     }
 
                     override fun onFailure(call: Call<Response>, t: Throwable) {
+                        println("hahaha")
                         Log.e("API Error", t.message.toString())
                     }
                 }
@@ -667,6 +674,34 @@ class MainActivity : AppCompatActivity() {
         val rand = (0..7).random();
 
         return rand;
+    }
+    //end
+
+    //start for fail
+    fun createFail(){
+
+        //calculate new life
+        life = life-1;
+        rightOfLife.text = life.toString();
+
+        //enable buttons
+        setEnableToSelectedAllButtons()
+
+        //clear value has written
+        wordResult.text = "";
+        sum = 0;
+
+        if(life == 0){
+            //for stop normal random falling while this buttons falling
+            isFirstFallAnimation = true;
+            life = 3
+            rightOfLife.text = "3";
+
+            for(index in 0..7){
+                startRandomFallAnimation(index);
+            }
+        }
+
     }
     //end
 
