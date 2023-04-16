@@ -1,37 +1,22 @@
 package com.example.wordgame
-import kotlin.random.Random
+import android.content.Intent
 import android.graphics.Color
 import android.os.*
 import android.util.Log
-import androidx.appcompat.app.AppCompatActivity
 import android.widget.Button
-import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
 import com.example.wordgame.domain.entities.Character
 import com.example.wordgame.domain.enums.Points
 import com.google.firebase.database.FirebaseDatabase
 import kotlinx.android.synthetic.main.activity_main.*
 import okhttp3.*
-import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
-import java.io.IOException
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
-import kotlin.collections.ArrayList
 
 // ** Oyun bitince skorun hesaplanıp firebase db'ye pushlanması gerekli. Kodlar aşağıda. sadece Score'un setvalue'sinin içi güncel score ile güncellenecek
-//var database= FirebaseDatabase.getInstance()
-//var databaseReference = database.reference.child("Scores")
-//var id= databaseReference.push()
-//id.child("id").setValue(id.key.toString())
-
-//val currentDateTime = LocalDateTime.now()
-//val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")
-//val formattedDateTime = currentDateTime.format(formatter)
-//id.child("Date").setValue(formattedDateTime)
-//id.child("Score").setValue("12")
-
 
 
 class MainActivity : AppCompatActivity() {
@@ -64,6 +49,9 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        val intent = intent
+        val hscore = intent.getStringExtra("mosthighscore")
+        highScore.text=hscore.toString()
 
         //start add all buttons
         buttons.add(button_0_0);buttons.add(button_0_1);buttons.add(button_0_2);buttons.add(button_0_3);
@@ -117,7 +105,8 @@ class MainActivity : AppCompatActivity() {
 
         //start fallAnimation by timer
         //isFirtFalling moved to global
-        object :CountDownTimer(500000000, fallingTime){
+
+        var fallanimationcontrol= object :CountDownTimer(500000000, fallingTime){
             override fun onTick(p0: Long) {
                 if(isFirstFallAnimation){
                     // we have just wasted first 4 second time here
@@ -128,6 +117,9 @@ class MainActivity : AppCompatActivity() {
             }
             override fun onFinish() {}
         }.start()
+
+
+
         //end
 
         //start add clickLister to all buttons
@@ -308,6 +300,7 @@ class MainActivity : AppCompatActivity() {
         var createdCharacter = createRandomCharacter();
 
         var fallingAnimation = object :CountDownTimer(100000, 300){
+            @RequiresApi(Build.VERSION_CODES.O)
             override fun onTick(p0: Long) {
                 if(
                     fallIndexCounter > 72||
@@ -336,6 +329,7 @@ class MainActivity : AppCompatActivity() {
     //end
 
     //start set view randomFallAnimation
+    @RequiresApi(Build.VERSION_CODES.O)
     fun setViewRandomFallAnimation(fallIndex:Int, character:String): Boolean{
         var index = fallIndex;
         //first Row condition
@@ -345,8 +339,18 @@ class MainActivity : AppCompatActivity() {
             var button : Button = buttons[index];
             // check is game over ?
             if(button.text.toString().length !=0){
-                // game should be over
-                // for now game doesn't end
+                print("Girdi")
+                var database= FirebaseDatabase.getInstance()
+                var databaseReference = database.reference.child("Scores")
+                var id= databaseReference.push()
+                id.child("id").setValue(id.key.toString())
+                val currentDateTime = LocalDateTime.now()
+                val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")
+                val formattedDateTime = currentDateTime.format(formatter)
+                id.child("Date").setValue(formattedDateTime)
+                id.child("Score").setValue(score.text.toString())
+                change_activity()
+                System.exit(0)
                 return true;
             }else{
                 button.text = character;
@@ -703,6 +707,18 @@ class MainActivity : AppCompatActivity() {
         }
 
     }
+
+    fun change_activity(){
+
+        val intent= Intent(this,scorelist::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+        startActivity(intent)
+        finish()
+
+
+
+    }
+
     //end
 
 }

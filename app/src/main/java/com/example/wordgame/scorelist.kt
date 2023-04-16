@@ -26,14 +26,12 @@ class scorelist : AppCompatActivity() {
         getScoreData()
 
 
-
-
-
         val returnbutton=findViewById<Button>(R.id.returnbutton)
 
         returnbutton.setOnClickListener {
 
             val intent= Intent(this,firstpage::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             startActivity(intent)
             finish()
 
