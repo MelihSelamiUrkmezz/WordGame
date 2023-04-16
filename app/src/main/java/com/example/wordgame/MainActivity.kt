@@ -105,7 +105,6 @@ class MainActivity : AppCompatActivity() {
 
         //start fallAnimation by timer
         //isFirtFalling moved to global
-
         var fallanimationcontrol= object :CountDownTimer(500000000, fallingTime){
             override fun onTick(p0: Long) {
                 if(isFirstFallAnimation){
@@ -116,10 +115,41 @@ class MainActivity : AppCompatActivity() {
                 }
             }
             override fun onFinish() {}
+        }
+        fallanimationcontrol.start()
+        //end
+
+        //start change fallingTime
+        var for100:Boolean = true;
+        var for200:Boolean = true;
+        var for300:Boolean = true;
+        var for400:Boolean = true;
+        object : CountDownTimer(500000000,10000){
+            override fun onTick(p0: Long) {
+                if(score.text.toString().toInt()>=400 && for400){
+                    for400 = false;
+                    fallingTime = 1000;
+                    fallanimationcontrol.cancel()
+                    fallanimationcontrol.start()
+                }else if(score.text.toString().toInt()>=300 && for300){
+                    for300 = false;
+                    fallingTime = 2000;
+                    fallanimationcontrol.cancel()
+                    fallanimationcontrol.start()
+                }else if(score.text.toString().toInt()>=200 && for200){
+                    for200 = false;
+                    fallingTime = 3000;
+                    fallanimationcontrol.cancel()
+                    fallanimationcontrol.start()
+                }else if(score.text.toString().toInt()>=100 && for100){
+                    for100 = false;
+                    fallingTime = 4000;
+                    fallanimationcontrol.cancel()
+                    fallanimationcontrol.start()
+                }
+            }
+            override fun onFinish() {}
         }.start()
-
-
-
         //end
 
         //start add clickLister to all buttons
@@ -159,10 +189,8 @@ class MainActivity : AppCompatActivity() {
 
         //start apply response clicklistener
         applyButton.setOnClickListener{
-
             val response = ServiceBuilder.buildService(APIInterface::class.java)
             val obj=com.example.wordgame.Request(wordResult.text.toString().toLowerCase())
-
 
             response.check_word(obj).enqueue(
                 object : retrofit2.Callback<com.example.wordgame.Response>{
