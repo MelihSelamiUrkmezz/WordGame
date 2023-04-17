@@ -10,11 +10,9 @@ import android.view.View
 import android.widget.Button
 import androidx.annotation.RequiresApi
 import com.example.wordgame.R
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
+import com.google.firebase.database.ktx.getValue
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_main.*
 import java.time.LocalDateTime
@@ -41,40 +39,40 @@ class firstpage : AppCompatActivity() {
     }
 
     fun change_activity(view: View){
+        // Realtime Database referansı oluşturun
+        var highscore=0;
+        val intent= Intent(this,MainActivity::class.java)
+        val database: FirebaseDatabase = FirebaseDatabase.getInstance()
 
-        val db = Firebase.database.reference
-        var highscore=0
-        db.addListenerForSingleValueEvent(object : ValueEventListener {
+// Veritabanı referansını alın
+        val myRef: DatabaseReference = database.reference
+        myRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    for (data in dataSnapshot.children) {
-                        // Do something with each data
-                        val key = data.key
-                        val value = data.value
-                        if(key=="Score" && value.toString().toInt()>highscore){
-                            highscore=value.toString().toInt()
+                // Verileri okuyun
+                for (postSnapshot in dataSnapshot.children) {
+                    val value = postSnapshot.getValue()
+                    val map = postSnapshot.getValue() as? Map<*, *>
+                    map?.forEach { (key, value) ->
+                        val innerMap = value as? Map<*, *>
+                        val score = innerMap?.get("Score") as? String
+                        if(score.toString().toInt()>highscore){
+                            highscore=score.toString().toInt()
                         }
-                        Log.d(TAG, "Key: $key, Value: $value")
                     }
-                } else {
-                    Log.d(TAG, "No data found")
                 }
+                println(highscore)
+
+                intent.putExtra("mosthighscore", highscore.toString())
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                startActivity(intent)
+                finish()
+
             }
 
-            override fun onCancelled(databaseError: DatabaseError) {
-                Log.w(TAG, "Error getting data", databaseError.toException())
+            override fun onCancelled(error: DatabaseError) {
+                // Hata durumunda ne yapacağınızı belirtin
             }
         })
-
-
-        val intent= Intent(this,MainActivity::class.java)
-
-        val message = highscore.toString()
-        println(message)
-        intent.putExtra("mosthighscore", message)
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-        startActivity(intent)
-        finish()
 
 
 
