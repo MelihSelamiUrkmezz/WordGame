@@ -4,19 +4,34 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:background="@drawable/bg"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <TextView
+        android:id="@+id/skorsd2"
+        android:layout_width="70dp"
+        android:layout_height="27dp"
+        android:layout_marginTop="20dp"
+        android:text="Warning"
+        android:textSize="19sp"
+        app:layout_constraintBottom_toTopOf="@+id/rightOfLife"
+        app:layout_constraintEnd_toEndOf="@+id/rightOfLife"
+        app:layout_constraintStart_toStartOf="@+id/rightOfLife"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
+
     <androidx.gridlayout.widget.GridLayout
         android:id="@+id/gridLayout"
-        android:layout_width="398dp"
-        android:layout_height="480dp"
+        android:layout_width="380dp"
+        android:layout_height="434dp"
+        android:background="@drawable/bg"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.397">
+        app:layout_constraintVertical_bias="0.52">
 
         <Button
             android:id="@+id/button_2_0"
@@ -660,92 +675,120 @@
 
     </androidx.gridlayout.widget.GridLayout>
 
+
+    <TextView
+        android:id="@+id/skorsd"
+        android:layout_width="70dp"
+        android:layout_height="27dp"
+        android:layout_marginTop="20dp"
+        android:text="Score"
+        android:textSize="19sp"
+        app:layout_constraintBottom_toTopOf="@+id/score"
+        app:layout_constraintEnd_toEndOf="@+id/score"
+        app:layout_constraintHorizontal_bias="0.583"
+        app:layout_constraintStart_toStartOf="@+id/score"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <TextView
+        android:id="@+id/skorsd3"
+        android:layout_width="87dp"
+        android:layout_height="27dp"
+        android:layout_marginTop="20dp"
+        android:text="MaxScore"
+        android:textSize="19sp"
+        app:layout_constraintBottom_toTopOf="@+id/highScore"
+        app:layout_constraintEnd_toEndOf="@+id/highScore"
+        app:layout_constraintHorizontal_bias="0.857"
+        app:layout_constraintStart_toStartOf="@+id/highScore"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
+
     <TextView
         android:id="@+id/rightOfLife"
-        android:layout_width="88dp"
-        android:layout_height="45dp"
+        android:layout_width="94dp"
+        android:layout_height="48dp"
+        android:background="@drawable/custom_edittext"
         android:text="3"
         android:textAlignment="center"
         android:textSize="34sp"
-        app:layout_constraintBottom_toTopOf="@+id/gridLayout"
+        app:layout_constraintBottom_toBottomOf="@+id/wordResult"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/wordResult"
-        android:layout_width="272dp"
-        android:layout_height="41dp"
-        android:layout_marginStart="4dp"
-        android:layout_marginTop="25dp"
-        android:layout_marginBottom="16dp"
-        android:textAlignment="textStart"
-        android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/gridLayout"
-        app:layout_constraintVertical_bias="0.391" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.110000014" />
 
     <TextView
         android:id="@+id/score"
         android:layout_width="94dp"
         android:layout_height="48dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginBottom="17dp"
+        android:background="@drawable/custom_edittext"
         android:text="0"
         android:textAlignment="center"
         android:textSize="34sp"
-        app:layout_constraintBottom_toTopOf="@+id/gridLayout"
+        app:layout_constraintBottom_toTopOf="@+id/deleteButton"
         app:layout_constraintEnd_toStartOf="@+id/rightOfLife"
-        app:layout_constraintHorizontal_bias="0.235"
+        app:layout_constraintHorizontal_bias="0.283"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.586" />
+        app:layout_constraintVertical_bias="0.120000005" />
 
     <TextView
         android:id="@+id/highScore"
-        android:layout_width="112dp"
-        android:layout_height="42dp"
-        android:layout_marginBottom="8dp"
+        android:layout_width="94dp"
+        android:layout_height="48dp"
+        android:background="@drawable/custom_edittext"
         android:text="154"
         android:textAlignment="center"
         android:textSize="34sp"
-        app:layout_constraintBottom_toTopOf="@+id/gridLayout"
+        app:layout_constraintBottom_toTopOf="@+id/applyButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.774"
         app:layout_constraintStart_toEndOf="@+id/rightOfLife"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.7" />
+        app:layout_constraintVertical_bias="0.120000005" />
 
     <Button
         android:id="@+id/deleteButton"
-        android:layout_width="53dp"
-        android:layout_height="49dp"
-        android:layout_marginStart="12dp"
+        android:layout_width="55dp"
+        android:layout_height="50dp"
         android:layout_marginTop="12dp"
+        android:layout_marginEnd="260dp"
         android:background="#F44336"
         android:text="Sil"
         android:textColor="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/applyButton"
-        app:layout_constraintStart_toEndOf="@+id/wordResult"
         app:layout_constraintTop_toBottomOf="@+id/gridLayout"
-        app:layout_constraintVertical_bias="0.425"
+        app:layout_constraintVertical_bias="0.304"
         tools:ignore="TextContrastCheck" />
+
+    <TextView
+        android:id="@+id/wordResult"
+        android:layout_width="246dp"
+        android:layout_height="35dp"
+        android:layout_marginBottom="40dp"
+        android:textAlignment="textStart"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/applyButton"
+        app:layout_constraintHorizontal_bias="0.631"
+        app:layout_constraintStart_toEndOf="@+id/deleteButton" />
 
     <Button
         android:id="@+id/applyButton"
         android:layout_width="53dp"
         android:layout_height="49dp"
         android:layout_marginTop="12dp"
-        android:layout_marginEnd="5dp"
+        android:layout_marginEnd="16dp"
         android:background="#4CAF50"
         android:text="Eşle"
         android:textColor="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/gridLayout"
-        app:layout_constraintVertical_bias="0.425"
+        app:layout_constraintVertical_bias="0.34"
         tools:ignore="TextContrastCheck" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -39,16 +39,14 @@ class firstpage : AppCompatActivity() {
     }
 
     fun change_activity(view: View){
-        // Realtime Database referansı oluşturun
         var highscore=0;
         val intent= Intent(this,MainActivity::class.java)
         val database: FirebaseDatabase = FirebaseDatabase.getInstance()
 
-// Veritabanı referansını alın
         val myRef: DatabaseReference = database.reference
         myRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                // Verileri okuyun
+
                 for (postSnapshot in dataSnapshot.children) {
                     val value = postSnapshot.getValue()
                     val map = postSnapshot.getValue() as? Map<*, *>
@@ -70,7 +68,7 @@ class firstpage : AppCompatActivity() {
             }
 
             override fun onCancelled(error: DatabaseError) {
-                // Hata durumunda ne yapacağınızı belirtin
+
             }
         })
 

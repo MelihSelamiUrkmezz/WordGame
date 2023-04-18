@@ -12,4 +12,5 @@
     <color name="edit_text_border">#03A9F4</color>
     <color name="edit_text_background">#f6fbff</color>
     <color name="grey">#696969</color>
+    <color name="custom">#272727</color>
 </resources>
