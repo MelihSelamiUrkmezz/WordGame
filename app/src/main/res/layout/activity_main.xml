@@ -13,7 +13,7 @@
         android:id="@+id/skorsd2"
         android:layout_width="70dp"
         android:layout_height="27dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:text="Warning"
         android:textSize="19sp"
         app:layout_constraintBottom_toTopOf="@+id/rightOfLife"
@@ -24,8 +24,8 @@
 
     <androidx.gridlayout.widget.GridLayout
         android:id="@+id/gridLayout"
-        android:layout_width="380dp"
-        android:layout_height="434dp"
+        android:layout_width="403dp"
+        android:layout_height="496dp"
         android:background="@drawable/bg"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -717,7 +717,7 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.110000014" />
+        app:layout_constraintVertical_bias="0.060000002" />
 
     <TextView
         android:id="@+id/score"
@@ -732,7 +732,7 @@
         app:layout_constraintHorizontal_bias="0.283"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.120000005" />
+        app:layout_constraintVertical_bias="0.060000002" />
 
     <TextView
         android:id="@+id/highScore"
@@ -747,33 +747,33 @@
         app:layout_constraintHorizontal_bias="0.774"
         app:layout_constraintStart_toEndOf="@+id/rightOfLife"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.120000005" />
+        app:layout_constraintVertical_bias="0.060000002" />
 
     <Button
         android:id="@+id/deleteButton"
         android:layout_width="55dp"
         android:layout_height="50dp"
         android:layout_marginTop="12dp"
-        android:layout_marginEnd="260dp"
+        android:layout_marginEnd="280dp"
         android:background="#F44336"
         android:text="Sil"
         android:textColor="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/applyButton"
         app:layout_constraintTop_toBottomOf="@+id/gridLayout"
-        app:layout_constraintVertical_bias="0.304"
+        app:layout_constraintVertical_bias="0.058"
         tools:ignore="TextContrastCheck" />
 
     <TextView
         android:id="@+id/wordResult"
         android:layout_width="246dp"
         android:layout_height="35dp"
-        android:layout_marginBottom="40dp"
+        android:layout_marginBottom="24dp"
         android:textAlignment="textStart"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/applyButton"
-        app:layout_constraintHorizontal_bias="0.631"
+        app:layout_constraintHorizontal_bias="0.575"
         app:layout_constraintStart_toEndOf="@+id/deleteButton" />
 
     <Button
@@ -788,7 +788,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/gridLayout"
-        app:layout_constraintVertical_bias="0.34"
+        app:layout_constraintVertical_bias="0.055"
         tools:ignore="TextContrastCheck" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

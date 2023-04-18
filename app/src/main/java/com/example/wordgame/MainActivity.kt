@@ -190,7 +190,7 @@ class MainActivity : AppCompatActivity() {
         //start apply response clicklistener
         applyButton.setOnClickListener{
             val response = ServiceBuilder.buildService(APIInterface::class.java)
-            val obj=com.example.wordgame.Request(wordResult.text.toString().toLowerCase())
+            val obj=com.example.wordgame.Request(wordResult.text.toString())
 
             response.check_word(obj).enqueue(
                 object : retrofit2.Callback<com.example.wordgame.Response>{
@@ -670,13 +670,13 @@ class MainActivity : AppCompatActivity() {
 
                 val random_index= kotlin.random.Random.nextInt(consonants.size);
                 consonants_count++;
-                return consonants[random_index].toUpperCase();
+                return consonants[random_index];
 
             }
             else{
                 val random_index2= kotlin.random.Random.nextInt(vowels.size);
                 vowels_count++;
-                return vowels[random_index2].toUpperCase();
+                return vowels[random_index2];
 
             }
         }
@@ -685,13 +685,13 @@ class MainActivity : AppCompatActivity() {
             if(vowels_count==0){
                 val random_index2= kotlin.random.Random.nextInt(vowels.size);
                 vowels_count++;
-                return vowels[random_index2].toUpperCase();
+                return vowels[random_index2];
 
             }
             else if(consonants_count==0){
                 val random_index= kotlin.random.Random.nextInt(consonants.size).toInt();
                 consonants_count++;
-                return consonants[random_index].toUpperCase();
+                return consonants[random_index];
             }
 
 
